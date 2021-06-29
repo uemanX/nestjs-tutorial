@@ -9,19 +9,22 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User as UserModel } from '@prisma/client';
+import { ApiResponse } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(
-    @Body() userData: { name?: string; email: string },
-  ): Promise<UserModel> {
-    return this.usersService.create(userData);
+  async create(@Body() data: CreateUserDto): Promise<UserModel> {
+    return this.usersService.create(data);
   }
 
   @Get()
+  @ApiResponse({ status: 200, description: 'ok baby' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(): Promise<UserModel[]> {
     return this.usersService.users();
   }
@@ -34,7 +37,7 @@ export class UsersController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() data: { email?: string; name?: string },
+    @Body() data: UpdateUserDto,
   ): Promise<UserModel> {
     return this.usersService.update({ where: { id: Number(id) }, data });
   }
