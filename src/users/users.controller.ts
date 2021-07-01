@@ -12,6 +12,7 @@ import { User as UserModel } from '@prisma/client';
 import { ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FindOneParams } from './dto/prams-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -30,20 +31,21 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<UserModel> {
-    return this.usersService.user({ id: Number(id) });
+  findOne(@Param() params: FindOneParams): Promise<UserModel> {
+    console.log(params);
+    return this.usersService.user({ id: Number(params.id) });
   }
 
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param() params: FindOneParams,
     @Body() data: UpdateUserDto,
   ): Promise<UserModel> {
-    return this.usersService.update({ where: { id: Number(id) }, data });
+    return this.usersService.update({ where: { id: Number(params.id) }, data });
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<UserModel> {
-    return this.usersService.remove({ id: Number(id) });
+  async remove(@Param() params: FindOneParams): Promise<UserModel> {
+    return this.usersService.remove({ id: Number(params.id) });
   }
 }
