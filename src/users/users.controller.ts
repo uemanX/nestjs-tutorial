@@ -6,13 +6,13 @@ import {
   Param,
   Delete,
   Put,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User as UserModel } from '@prisma/client';
 import { ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { FindOneParams } from './dto/prams-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -31,21 +31,20 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param() params: FindOneParams): Promise<UserModel> {
-    console.log(params);
-    return this.usersService.user({ id: Number(params.id) });
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<UserModel> {
+    return this.usersService.user({ id });
   }
 
   @Put(':id')
   async update(
-    @Param() params: FindOneParams,
+    @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateUserDto,
   ): Promise<UserModel> {
-    return this.usersService.update({ where: { id: Number(params.id) }, data });
+    return this.usersService.update({ where: { id }, data });
   }
 
   @Delete(':id')
-  async remove(@Param() params: FindOneParams): Promise<UserModel> {
-    return this.usersService.remove({ id: Number(params.id) });
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<UserModel> {
+    return this.usersService.remove({ id });
   }
 }
