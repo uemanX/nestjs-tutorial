@@ -10,7 +10,7 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async user(
+  async fineOne(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
     return this.prisma.user.findUnique({
