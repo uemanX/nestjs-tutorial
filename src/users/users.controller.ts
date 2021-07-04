@@ -32,7 +32,7 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number): Promise<UserModel> {
-    return this.usersService.fineOne({ id });
+    return this.usersService.findOne({ id });
   }
 
   @Put(':id')
